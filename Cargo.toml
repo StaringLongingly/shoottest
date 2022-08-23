@@ -7,6 +7,8 @@ edition = "2021"
 
 [dependencies]
 bevy = "0.8.0"
+rapier3d = { version = "0.14", features = [ "simd-stable" ] }
+nalgebra ="0.31.1"
 
 # Enable a small amount of optimization in debug mode
 [profile.dev]
