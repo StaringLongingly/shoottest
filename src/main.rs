@@ -3,39 +3,63 @@ use bevy::prelude::*;
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
-        .add_system(input_grabber)
+        .add_system(game)
         .run();
 }
 
-fn input_grabber(input: Res<Input<KeyCode>>)
+fn game(input: Res<Input<KeyCode>>)
 {
-    let mut x: i32 = 0;
-    let mut y: i32 = 0;
+    let mut moving_angle: f64 = 0.0;
+    let mut is_moving = true;
 
     if input.pressed(KeyCode::A)
     {
-        x = -256
+        if input.pressed(KeyCode::W)
+        {
+            moving_angle = 45.0;
+        }
+        else if input.pressed(KeyCode::S)
+        {
+            moving_angle = 135.0;
+        }
+        else
+        {
+            moving_angle = 90.0;
+        }   
     }
     else if input.pressed(KeyCode::D)
     {
-        x = 256
+        if input.pressed(KeyCode::W)
+        {
+            moving_angle = 315.0;
+        }
+        else if input.pressed(KeyCode::S)
+        {
+            moving_angle = 225.0;
+        }
+        else
+        {
+            moving_angle = 270.0;
+        }
+    }
+    else
+    {
+        if input.pressed(KeyCode::W)
+        {
+            moving_angle = 0.0;
+        }
+        else if input.pressed(KeyCode::S)
+        {
+            moving_angle = 180.0;
+        }
+        else
+        {
+            is_moving = false
+        }
     }
 
-    if input.pressed(KeyCode::W)
-    {
-        y = 256
-    }
-    else if input.pressed(KeyCode::S)
-    {
-        y = -256
-    }
-
-    if x.abs() == 256 && y.abs() == 256
-    {
-        x = (x as f32 * 0.70710677) as i32;
-        y = (y as f32 * 0.70710677) as i32;	
-    }
-
-    println!("{}", x);
-    print!("{}", y)
+    let direction = moving_angle.to_radians().sin_cos();
+    println!("{}", direction.0);
+    print!("{}", direction.1);
+    print!("              ");
 }
